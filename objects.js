@@ -30,6 +30,36 @@ async function createSun() {
   return group;
 }
 
+function createAsteroids() {
+  let group = new THREE.Object3D();
+
+  for (let i = 0; i < 50; i++) {
+    let subGroup = new THREE.Object3D();
+
+    let object = new THREE.Mesh(
+      new THREE.SphereGeometry(0.1, 64, 64),
+      new THREE.MeshPhongMaterial({
+        color: 0xffffff
+      })
+    );
+    let angle = Math.random() * 2 * Math.PI;
+    let radius = 50 + Math.random() * 3;
+    object.position.set(radius * Math.cos(angle), 0, radius * Math.sin(angle));
+    object.update = () => {};
+
+    subGroup.add(object);
+    subGroup.update = delta => {
+      subGroup.rotation.y +=
+        ((Math.random() * 2 + 2) * Math.PI * delta) / (360 * 100);
+    };
+    group.add(subGroup);
+  }
+
+  group.update = () => {};
+
+  return group;
+}
+
 async function createBody(name, size, orbit, moons, rings) {
   let group = new THREE.Object3D();
 

@@ -66,6 +66,9 @@ async function setup(canvas) {
   });
   scene.add(marsGroup);
 
+  let asteroidGroup = createAsteroids();
+  scene.add(asteroidGroup);
+
   let jupiterGroup = await createBody('jupiter', 3, {
     distance: 55,
     speed: 3,
