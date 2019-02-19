@@ -18,6 +18,8 @@ async function createSun() {
     new THREE.SphereGeometry(5, 64, 64),
     new THREE.MeshBasicMaterial(maps)
   );
+  object.update = () => {};
+
   group.add(object);
 
   let light = new THREE.PointLight(0xffffff, 1, 0, 2);
@@ -83,6 +85,10 @@ async function createBody(name, size, orbit, moons, rings) {
     new THREE.MeshPhongMaterial(maps)
   );
   object.position.set(orbit.distance, 0, 0);
+  object.update = delta => {
+    object.rotation.y -= (2 * Math.PI * orbit.spinSpeed * delta) / (360 * 100);
+  };
+
   group.add(object);
 
   if (moons) {

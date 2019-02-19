@@ -25,13 +25,15 @@ async function setup(canvas) {
 
   let mercuryGroup = await createBody('mercury', 0.5, {
     distance: 10,
-    speed: 0.9
+    speed: 0.9,
+    spinSpeed: 0.2
   });
   scene.add(mercuryGroup);
 
   let venusGroup = await createBody('venus', 0.8, {
     distance: 20,
-    speed: 2
+    speed: 2,
+    spinSpeed: 0.3
   });
   scene.add(venusGroup);
 
@@ -40,7 +42,8 @@ async function setup(canvas) {
     1.2,
     {
       distance: 30,
-      speed: 1
+      speed: 1,
+      spinSpeed: 1.2
     },
     [
       [
@@ -48,7 +51,8 @@ async function setup(canvas) {
         0.5,
         {
           distance: 5,
-          speed: 2
+          speed: 2,
+          spinSpeed: 0.2
         }
       ]
     ]
@@ -57,37 +61,43 @@ async function setup(canvas) {
 
   let marsGroup = await createBody('mars', 0.9, {
     distance: 40,
-    speed: 1.1
+    speed: 1.1,
+    spinSpeed: 0.5
   });
   scene.add(marsGroup);
 
   let jupiterGroup = await createBody('jupiter', 3, {
     distance: 55,
-    speed: 3
+    speed: 3,
+    spinSpeed: 0.7
   });
   scene.add(jupiterGroup);
 
   let saturnGroup = await createBody('saturn', 2.5, {
     distance: 70,
-    speed: 0.9
+    speed: 0.9,
+    spinSpeed: 1.4
   });
   scene.add(saturnGroup);
 
   let uranusGroup = await createBody('uranus', 2, {
     distance: 80,
-    speed: 0.4
+    speed: 0.4,
+    spinSpeed: 1.5
   });
   scene.add(uranusGroup);
 
   let neptuneGroup = await createBody('neptune', 2, {
     distance: 90,
-    speed: 2.6
+    speed: 2.6,
+    spinSpeed: 0.1
   });
   scene.add(neptuneGroup);
 
   let plutoGroup = await createBody('pluto', 0.5, {
     distance: 100,
-    speed: 2.1
+    speed: 2.1,
+    spinSpeed: 0.3
   });
   scene.add(plutoGroup);
 
@@ -103,9 +113,9 @@ function run(elements, time) {
     run(elements, time);
   });
 
-  elements.scene.traverse(group => {
-    if (group.type === 'Object3D') {
-      group.update(delta);
+  elements.scene.traverse(object => {
+    if (object.type === 'Object3D' || object.type === 'Mesh') {
+      object.update(delta);
     }
   });
 
