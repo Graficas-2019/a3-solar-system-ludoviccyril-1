@@ -84,7 +84,36 @@ async function setup(canvas) {
       speed: 0.9,
       spinSpeed: 1.4
     },
-    null,
+
+    [
+      [
+        'moon',
+        0.5,
+        {
+          distance: 5,
+          speed: 1.9,
+          spinSpeed: 0.2
+        }
+      ],
+      [
+        'moon',
+        0.5,
+        {
+          distance: 6,
+          speed: 2.2,
+          spinSpeed: 0.2
+        }
+      ],
+      [
+        'moon',
+        0.5,
+        {
+          distance: 7,
+          speed: 2,
+          spinSpeed: 0.2
+        }
+      ]
+    ],
     {
       innerRadius: 3,
       outerRadius: 5,
@@ -93,18 +122,48 @@ async function setup(canvas) {
   );
   scene.add(saturnGroup);
 
-  let uranusGroup = await createBody('uranus', 2, {
-    distance: 80,
-    speed: 0.4,
-    spinSpeed: 1.5
-  });
+  let uranusGroup = await createBody(
+    'uranus',
+    2,
+    {
+      distance: 80,
+      speed: 0.4,
+      spinSpeed: 1.5
+    },
+    [
+      [
+        'moon',
+        0.5,
+        {
+          distance: 5,
+          speed: 2,
+          spinSpeed: 0.2
+        }
+      ]
+    ]
+  );
   scene.add(uranusGroup);
 
-  let neptuneGroup = await createBody('neptune', 2, {
-    distance: 90,
-    speed: 2.6,
-    spinSpeed: 0.1
-  });
+  let neptuneGroup = await createBody(
+    'neptune',
+    2,
+    {
+      distance: 90,
+      speed: 2.6,
+      spinSpeed: 0.1
+    },
+    [
+      [
+        'moon',
+        0.5,
+        {
+          distance: 5,
+          speed: 2,
+          spinSpeed: 0.2
+        }
+      ]
+    ]
+  );
   scene.add(neptuneGroup);
 
   let plutoGroup = await createBody('pluto', 0.5, {
