@@ -91,6 +91,27 @@ async function createBody(name, size, orbit, moons, rings) {
 
   group.add(object);
 
+  let orbitGeometry = new THREE.Geometry();
+
+  for (let i = 0; i < 2000; i++) {
+    orbitGeometry.vertices.push(
+      new THREE.Vector3(
+        orbit.distance * Math.cos((2 * i * Math.PI) / 2000),
+        0,
+        orbit.distance * Math.sin((2 * i * Math.PI) / 2000)
+      )
+    );
+  }
+
+  let orbitLine = new THREE.Line(
+    orbitGeometry,
+    new THREE.LineBasicMaterial({
+      color: 0x0000ff
+    })
+  );
+
+  group.add(orbitLine);
+
   if (moons) {
     for (let moon of moons) {
       let moonGroup = await createBody(...moon);
