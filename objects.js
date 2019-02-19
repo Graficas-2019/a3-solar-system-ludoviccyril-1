@@ -33,12 +33,12 @@ async function createSun() {
 async function createBody(name, size, orbit, moons, rings) {
   let group = new THREE.Object3D();
 
-  let maps = {};
+  let objectMaps = {};
   await new Promise(resolve => {
     new THREE.TextureLoader().load(
       `assets/${name}_texture.jpg`,
       textureMap => {
-        maps.map = textureMap;
+        objectMaps.map = textureMap;
         resolve();
       },
       null,
@@ -49,7 +49,7 @@ async function createBody(name, size, orbit, moons, rings) {
     new THREE.TextureLoader().load(
       `assets/${name}_normal.jpg`,
       normalMap => {
-        maps.normalMap = normalMap;
+        objectMaps.normalMap = normalMap;
         resolve();
       },
       null,
@@ -60,8 +60,8 @@ async function createBody(name, size, orbit, moons, rings) {
     new THREE.TextureLoader().load(
       `assets/${name}_bump.jpg`,
       bumpMap => {
-        maps.bumpMap = bumpMap;
-        maps.bumpScale = 0.06;
+        objectMaps.bumpMap = bumpMap;
+        objectMaps.bumpScale = 0.06;
         resolve();
       },
       null,
@@ -72,7 +72,7 @@ async function createBody(name, size, orbit, moons, rings) {
     new THREE.TextureLoader().load(
       `assets/${name}_specular.jpg`,
       specularMap => {
-        maps.specularMap = specularMap;
+        objectMaps.specularMap = specularMap;
         resolve();
       },
       null,
@@ -82,7 +82,7 @@ async function createBody(name, size, orbit, moons, rings) {
 
   let object = new THREE.Mesh(
     new THREE.SphereGeometry(size, 64, 64),
-    new THREE.MeshPhongMaterial(maps)
+    new THREE.MeshPhongMaterial(objectMaps)
   );
   object.position.set(orbit.distance, 0, 0);
   object.update = delta => {
@@ -111,6 +111,51 @@ async function createBody(name, size, orbit, moons, rings) {
   );
 
   group.add(orbitLine);
+
+  if (rings) {
+    let ringMaps = {
+      side: THREE.DoubleSide
+    };
+
+    await new Promise(resolve => {
+      new THREE.TextureLoader().load(
+        `assets/${name}_ring_texture.jpg`,
+        textureMap => {
+          console.log('here');
+          ringMaps.map = textureMap;
+          resolve();
+        },
+        null,
+        resolve
+      );
+    });
+
+    await new Promise(resolve => {
+      new THREE.TextureLoader().load(
+        `assets/${name}_ring_bump.jpg`,
+        bumpMap => {
+          console.log('here');
+          ringMaps.bumpMap = bumpMap;
+          ringMaps.bumpScale = 0.06;
+          resolve();
+        },
+        null,
+        resolve
+      );
+    });
+
+    let ringsObject = new THREE.Mesh(
+      new THREE.RingGeometry(rings.innerRadius, rings.outerRadius, 64),
+      new THREE.MeshPhongMaterial(ringMaps)
+    );
+    ringsObject.rotation.x += Math.PI / 4;
+    ringsObject.rotation.y += Math.PI / 4;
+    ringsObject.rotation.z += rings.inclination;
+    ringsObject.position.set(orbit.distance, 0, 0);
+    ringsObject.update = () => {};
+
+    group.add(ringsObject);
+  }
 
   if (moons) {
     for (let moon of moons) {

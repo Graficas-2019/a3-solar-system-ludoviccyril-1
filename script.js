@@ -73,11 +73,21 @@ async function setup(canvas) {
   });
   scene.add(jupiterGroup);
 
-  let saturnGroup = await createBody('saturn', 2.5, {
-    distance: 70,
-    speed: 0.9,
-    spinSpeed: 1.4
-  });
+  let saturnGroup = await createBody(
+    'saturn',
+    2.5,
+    {
+      distance: 70,
+      speed: 0.9,
+      spinSpeed: 1.4
+    },
+    null,
+    {
+      innerRadius: 3,
+      outerRadius: 5,
+      inclination: Math.PI / 5
+    }
+  );
   scene.add(saturnGroup);
 
   let uranusGroup = await createBody('uranus', 2, {
