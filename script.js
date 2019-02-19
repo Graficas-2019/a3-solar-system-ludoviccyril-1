@@ -1,6 +1,6 @@
-function setup(canvas) {
+async function setup(canvas) {
   // setup renderer
-  let renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  let renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(canvas.width, canvas.height);
 
   // set up camera
@@ -11,51 +11,111 @@ function setup(canvas) {
     4000
   );
   camera.position.set(-2, 6, 12);
+
+  // set up orbit controls
   let controls = new THREE.OrbitControls(camera, renderer.domElement);
 
   // set up scene
   let scene = new THREE.Scene();
   scene.add(camera);
 
-  let group = new THREE.Object3D();
+  // set up object groups
+  let sunGroup = await createSun();
+  scene.add(sunGroup);
 
-  ambientLight = new THREE.AmbientLight(0x888888);
-  group.add(ambientLight);
-
-  geometry = new THREE.CubeGeometry(2, 2, 2);
-
-  // And put the geometry and material together into a mesh
-  mesh = new THREE.Mesh(
-    geometry,
-    new THREE.MeshPhongMaterial({ color: 0xffffff })
-  );
-  mesh.position.y = 3;
-
-  // Add the mesh to our group
-  group.add(mesh);
-
-  let loader = new THREE.OBJLoader();
-  loader.load('http://misc.tenatek.com/asteroid.obj', object => {
-    object.position.set(0, 0, 0);
-    group.add(object);
+  let mercuryGroup = await createBody('mercury', 0.5, {
+    distance: 10,
+    speed: 0.9
   });
+  scene.add(mercuryGroup);
 
-  scene.add(group);
+  let venusGroup = await createBody('venus', 0.8, {
+    distance: 20,
+    speed: 2
+  });
+  scene.add(venusGroup);
+
+  let earthGroup = await createBody(
+    'earth',
+    1.2,
+    {
+      distance: 30,
+      speed: 1
+    },
+    [
+      [
+        'moon',
+        0.5,
+        {
+          distance: 5,
+          speed: 2
+        }
+      ]
+    ]
+  );
+  scene.add(earthGroup);
+
+  let marsGroup = await createBody('mars', 0.9, {
+    distance: 40,
+    speed: 1.1
+  });
+  scene.add(marsGroup);
+
+  let jupiterGroup = await createBody('jupiter', 3, {
+    distance: 55,
+    speed: 3
+  });
+  scene.add(jupiterGroup);
+
+  let saturnGroup = await createBody('saturn', 2.5, {
+    distance: 70,
+    speed: 0.9
+  });
+  scene.add(saturnGroup);
+
+  let uranusGroup = await createBody('uranus', 2, {
+    distance: 80,
+    speed: 0.4
+  });
+  scene.add(uranusGroup);
+
+  let neptuneGroup = await createBody('neptune', 2, {
+    distance: 90,
+    speed: 2.6
+  });
+  scene.add(neptuneGroup);
+
+  let plutoGroup = await createBody('pluto', 0.5, {
+    distance: 100,
+    speed: 2.1
+  });
+  scene.add(plutoGroup);
 
   return { renderer, scene, camera, controls };
 }
 
-function run(elements) {
+function run(elements, time) {
+  let now = Date.now();
+  let delta = now - time;
+  time = now;
+
   requestAnimationFrame(function() {
-    run(elements);
+    run(elements, time);
+  });
+
+  elements.scene.traverse(group => {
+    if (group.type === 'Object3D') {
+      group.update(delta);
+    }
   });
 
   elements.renderer.render(elements.scene, elements.camera);
   elements.controls.update();
 }
 
-$(document).ready(() => {
+$(document).ready(async () => {
   let canvas = document.getElementById('solar');
-  let elements = setup(canvas);
-  run(elements);
+  let elements = await setup(canvas);
+  let time = Date.now();
+  run(elements, time);
 });
