@@ -138,7 +138,18 @@ async function setup(canvas) {
           distance: 5,
           speed: 2,
           spinSpeed: 0.2
-        }
+        },
+        [
+          [
+            'moon',
+            0.2,
+            {
+              distance: 2,
+              speed: 0.9,
+              spinSpeed: 0
+            }
+          ]
+        ]
       ]
     ]
   );
