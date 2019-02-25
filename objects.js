@@ -55,7 +55,10 @@ function createAsteroids() {
     group.add(subGroup);
   }
 
-  group.update = () => {};
+  roup.update = delta => {
+    group.rotation.y += (2 * Math.PI * 10 * delta) / (360 * 100);
+  };
+
 
   return group;
 }
